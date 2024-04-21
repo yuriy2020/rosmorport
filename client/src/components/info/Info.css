@@ -1,0 +1,16 @@
+.info_panel {
+    background-color: #04aa6d;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 10px;
+}
+
+.info_panel_text {
+    font-size: 11px;
+    color: #f1f1f1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
