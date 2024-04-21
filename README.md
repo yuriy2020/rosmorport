@@ -7,7 +7,7 @@
 - nodejs Expres.js (server side)
 
 Для запуска приложения нужно:
-- Установить все пакеты в папках `jobtest/server` и `/jobtest/client` :
+- Установить все пакеты в папках `rosmorport/server` и `/rosmorport/client` :
 ```sh
 npm install
 ```
