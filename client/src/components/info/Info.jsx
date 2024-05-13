@@ -19,9 +19,15 @@ const Info = () => {
                     </>
                 </div>
                 :
-                <Button variant='contained' color='primary' onClick={() => apiStore.setOpenModal(true)}>
-                    Вход
-                </Button>}
+                <div className={'info_panel_text'}>
+                    <Button variant='contained' color='primary' onClick={() => apiStore.setOpenModal(true,'login')}>
+                        Вход
+                    </Button>
+                    <Button variant='contained' color='primary' onClick={() => apiStore.setOpenModal(true, 'register')}>
+                        Регистрация
+                    </Button>
+                </div>
+            }
         </div>
     )
 }

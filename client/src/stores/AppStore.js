@@ -1,5 +1,5 @@
 import {makeAutoObservable} from "mobx"
-
+import Cookies from 'js-cookie';
 class Store {
     constructor() {
         makeAutoObservable(this)
@@ -8,6 +8,7 @@ class Store {
     value = 0
     textAuth = 'Для авторизации введите логин и пароль'
     isOpenModal = false
+    isOpenLoginModal = false
     login = ''
     password = ''
     isAuth = sessionStorage.getItem('isAuth') === 'true'
@@ -18,6 +19,7 @@ class Store {
     errorName = false
     errorLogin = false
     errorPassword = false
+    typeSign = ''
 
     formData = {
         family: '',
@@ -42,8 +44,12 @@ class Store {
         this.openFormModal = value
     }
 
-    setOpenModal = (value) => {
+    setOpenModal = (value, typeSign) => {
         this.isOpenModal = value
+        this.typeSign = typeSign
+    }
+    setOpenLoginModal = (value) => {
+        this.isOpenLoginModal = value
     }
     setLogin = (login) => {
         this.login = login
@@ -75,28 +81,35 @@ class Store {
     }
 
     auth = () => {
-        fetch('http://localhost:5000/auth', {
+
+        fetch(`http://localhost:8000/${this.typeSign}/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken':Cookies.get('csrftoken'),
             },
             body: JSON.stringify({
-                login: this.login,
+                email: this.login,
                 password: this.password
             }),
         })
             .then((res) => res.json())
             .then(
                 (result) => {
-                    if (result.status) {
+                    if (result.status === 201) {
                         sessionStorage.setItem('token', result.token);
-                        sessionStorage.setItem('login', this.login);
-                        sessionStorage.setItem('isAuth', 'true');
-                        this.text = result.data.text || [];
-                        this.isAuth = true;
+                        // this.text = result.data.text || [];
+                        // this.isAuth = true;
                         this.setOpenModal(false);
-                    } else {
-                        this.isAuth = false;
+                    } else if (result.status === 200) {
+                        const localToken = sessionStorage.getItem('token');
+                        if (localToken === result.token) {
+                            this.setOpenModal(false);
+                            this.isAuth = true;
+                            sessionStorage.setItem('isAuth', 'true');
+                        }else{
+                            sessionStorage.setItem('isAuth', 'false');
+                        }
                     }
                     this.setTextAuth(result.message);
                 })
@@ -112,7 +125,7 @@ class Store {
 
     logout = () => {
         this.setTextAuth('Для авторизации введите логин и пароль')
-        fetch(`http://localhost:5000/logout`)
+        fetch(`http://localhost:8000/logout`)
             .then((res) => res.json())
             .then(() => {
                     this.isAuth = false
@@ -124,7 +137,7 @@ class Store {
     }
 
     loadData = (id) => {
-        fetch(`http://localhost:5000/otchet?id=${id}`)
+        fetch(`http://localhost:8000/otchet?id=${id}`)
             .then((res) => res.json())
             .then((result) => {
                     this.text = result.data
@@ -136,7 +149,7 @@ class Store {
 
     loadAbout = () => {
         apiStore.text = []
-        fetch(`http://localhost:5000/about/`)
+        fetch(`http://localhost:8000/about/`)
             .then((res) => res.json())
             .then((result) => {
                     this.message = result.data
@@ -158,7 +171,7 @@ class Store {
     }
 
     sendForm = () => {
-        fetch(`http://localhost:5000/form`, {
+        fetch(`http://localhost:8000/form`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
