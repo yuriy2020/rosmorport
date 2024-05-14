@@ -33,21 +33,21 @@ function Dialogs() {
 
     }, [apiStore.formData.name])
 
-    useEffect(() => {
-        if (apiStore.login !== '') {
-            apiStore.setErrorLogin(false)
-            return
-        }
-        apiStore.setErrorLogin(true)
-    }, [apiStore.login])
-
-    useEffect(() => {
-        if (apiStore.password !== '') {
-            apiStore.setErrorPassword(false)
-            return
-        }
-        apiStore.setErrorPassword(true)
-    }, [apiStore.password]);
+    // useEffect(() => {
+    //     if (apiStore.login !== '') {
+    //         apiStore.setErrorLogin(false)
+    //         return
+    //     }
+    //     apiStore.setErrorLogin(true)
+    // }, [apiStore.login])
+    //
+    // useEffect(() => {
+    //     if (apiStore.password !== '') {
+    //         apiStore.setErrorPassword(false)
+    //         return
+    //     }
+    //     apiStore.setErrorPassword(true)
+    // }, [apiStore.password]);
 
 
     return (
@@ -179,40 +179,56 @@ function Dialogs() {
             </Dialog>
 
             <Dialog open={apiStore.isOpenModal} onClose={() => apiStore.setOpenModal(false)}>
-                    <DialogTitle>Авторизация</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>{apiStore.textAuth}</DialogContentText>
+                <DialogTitle>Регистрация</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>{apiStore.textAuth}</DialogContentText>
+                    <TextField
+                        autoFocus
+                        required
+                        margin='dense'
+                        id='login'
+                        name='login'
+                        label='Логин'
+                        type='text'
+                        fullWidth
+                        variant='standard'
+                        onChange={(event) => apiStore.setReg('username', event.target.value)}
+                    />
+                    {apiStore.typeSign === 'register' ?
                         <TextField
-                            autoFocus
+                            hidden={apiStore.typeSign === 'login'}
                             required
                             margin='dense'
-                            id='login'
-                            name='login'
-                            label='Логин'
-                            type='text'
+                            id='email'
+                            name='email'
+                            label='Email'
+                            type='email'
                             fullWidth
                             variant='standard'
-                            onChange={(event) => apiStore.setLogin(event.target.value)}
+                            onChange={(event) => apiStore.setReg('email', event.target.value)}
                         />
-                        <TextField
-                            required
-                            margin='dense'
-                            id='password'
-                            name='password'
-                            label='Пароль'
-                            type='password'
-                            fullWidth
-                            variant='standard'
-                            onChange={(event) => apiStore.setPassword(event.target.value)}
-                        />
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={() => apiStore.setOpenModal(false)}>Отмена</Button>
-                        <Button type='submit' onClick={apiStore.auth}
-                                disabled={apiStore.errorLogin || apiStore.errorPassword}>
-                            Войти
-                        </Button>
-                    </DialogActions>
+                        : null
+                    }
+                    <TextField
+                        required
+                        margin='dense'
+                        id='password'
+                        name='password'
+                        label='Пароль'
+                        type='password'
+                        fullWidth
+                        variant='standard'
+                        onChange={(event) => apiStore.setReg('password', event.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => apiStore.setOpenModal(false)}>Отмена</Button>
+                    <Button type='submit' onClick={apiStore.auth}
+                        // disabled={apiStore.errorLogin || apiStore.errorPassword}
+                    >
+                        Войти
+                    </Button>
+                </DialogActions>
             </Dialog>
         </>
     );

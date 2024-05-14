@@ -1,5 +1,6 @@
 import {makeAutoObservable} from "mobx"
 import Cookies from 'js-cookie';
+
 class Store {
     constructor() {
         makeAutoObservable(this)
@@ -12,6 +13,7 @@ class Store {
     login = ''
     password = ''
     isAuth = sessionStorage.getItem('isAuth') === 'true'
+    token = sessionStorage.getItem('token')
     text = []
     openFormModal = false
     message = 'нет данных'
@@ -39,6 +41,8 @@ class Store {
         }
     }
 
+    regForm = {}
+
     setOpenFormModal = (value) => {
         this.clearForm()
         this.openFormModal = value
@@ -48,15 +52,16 @@ class Store {
         this.isOpenModal = value
         this.typeSign = typeSign
     }
-    setOpenLoginModal = (value) => {
-        this.isOpenLoginModal = value
+    // setOpenLoginModal = (value) => {
+    //     this.isOpenLoginModal = value
+    // }
+    setReg = (field, value) => {
+        this.regForm = {...this.regForm, [field]: value}
+        console.log(this.regForm)
     }
-    setLogin = (login) => {
-        this.login = login
-    }
-    setPassword = (password) => {
-        this.password = password
-    }
+    // setPassword = (password) => {
+    //     this.password = password
+    // }
 
     clearData = () => {
         sessionStorage.setItem('token', "")
@@ -80,43 +85,35 @@ class Store {
         this.formData.food.vegan = false
     }
 
-    auth = () => {
-
-        fetch(`http://localhost:8000/${this.typeSign}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken':Cookies.get('csrftoken'),
-            },
-            body: JSON.stringify({
-                email: this.login,
-                password: this.password
-            }),
-        })
-            .then((res) => res.json())
-            .then(
-                (result) => {
-                    if (result.status === 201) {
-                        sessionStorage.setItem('token', result.token);
-                        // this.text = result.data.text || [];
-                        // this.isAuth = true;
-                        this.setOpenModal(false);
-                    } else if (result.status === 200) {
-                        const localToken = sessionStorage.getItem('token');
-                        if (localToken === result.token) {
-                            this.setOpenModal(false);
-                            this.isAuth = true;
-                            sessionStorage.setItem('isAuth', 'true');
-                        }else{
-                            sessionStorage.setItem('isAuth', 'false');
-                        }
-                    }
-                    this.setTextAuth(result.message);
-                })
-            .catch((error) => {
-                console.log(error)
-                this.text = []
+    auth = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/${this.typeSign}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-CSRFToken': Cookies.get('csrftoken'),
+                },
+                body: new URLSearchParams(this.regForm).toString(),
             });
+
+            const result = await response.json();
+
+            if (result.status === 201) {
+                sessionStorage.setItem('token', result.token);
+                this.setOpenModal(false);
+            } else if (result.status === 200 && result.token) {
+                this.setOpenModal(false);
+                sessionStorage.setItem('token', result.token);
+                this.isAuth = true;
+            } else {
+                sessionStorage.setItem('isAuth', 'false');
+            }
+
+            this.setTextAuth(result.message);
+        } catch (error) {
+            console.error(error);
+            this.text = [];
+        }
     }
 
     reloadPageWindow() {
