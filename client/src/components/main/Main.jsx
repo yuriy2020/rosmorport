@@ -6,10 +6,10 @@ import Grid from "../grid/Grid";
 import {apiStore} from "../../stores/AppStore";
 
 const Main = () => {
-
-    return (
-        apiStore.isAuth && apiStore.text.length > 0 ? <Grid /> : <div>{apiStore.message}</div>
-    )
+    if (apiStore.isAuth && apiStore.text.length > 0) {
+        return <Grid/>
+    }
+    return <div>{apiStore.message}</div>
 }
 
 export default observer(Main);

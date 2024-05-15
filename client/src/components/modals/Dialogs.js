@@ -15,14 +15,9 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import {observer} from "mobx-react-lite";
 import DialogActions from "@mui/material/DialogActions";
+import {COUNTRIES} from "../../consts";
 
 function Dialogs() {
-
-    const countries = [
-        {code: 'RU', label: 'Россия', phone: '7'},
-        {code: 'BY', label: 'Belarus', phone: '375'},
-        {code: 'AF', label: 'Afghanistan', phone: '93'}
-    ]
 
     useEffect(() => {
         if (apiStore.formData.name !== '') {
@@ -97,7 +92,7 @@ function Dialogs() {
                         <Autocomplete
                             id="country-select-demo"
                             sx={{width: 300}}
-                            options={countries}
+                            options={COUNTRIES}
                             autoHighlight
                             getOptionLabel={(option) => option.label || ''}
                             isOptionEqualToValue={(option, value) => option.code === value.code}

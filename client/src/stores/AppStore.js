@@ -1,5 +1,6 @@
 import {makeAutoObservable} from "mobx"
 import Cookies from 'js-cookie';
+import {BASE_API} from "../consts";
 
 class Store {
     constructor() {
@@ -87,7 +88,7 @@ class Store {
 
     auth = async () => {
         try {
-            const response = await fetch(`http://localhost:8000/${this.typeSign}/`, {
+            const response = await fetch(`${BASE_API}${this.typeSign}/`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -99,11 +100,11 @@ class Store {
             const result = await response.json();
 
             if (result.status === 201) {
-                sessionStorage.setItem('token', result.token);
+                Cookies.set('csrftoken', result.token);
                 this.setOpenModal(false);
             } else if (result.status === 200 && result.token) {
                 this.setOpenModal(false);
-                sessionStorage.setItem('token', result.token);
+                Cookies.set('csrftoken', result.token);
                 this.isAuth = true;
             } else {
                 sessionStorage.setItem('isAuth', 'false');
@@ -122,7 +123,7 @@ class Store {
 
     logout = () => {
         this.setTextAuth('Для авторизации введите логин и пароль')
-        fetch(`http://localhost:8000/logout`)
+        fetch(`${BASE_API}logout`)
             .then((res) => res.json())
             .then(() => {
                     this.isAuth = false
@@ -134,7 +135,7 @@ class Store {
     }
 
     loadData = (id) => {
-        fetch(`http://localhost:8000/otchet?id=${id}`)
+        fetch(`${BASE_API}otchet?id=${id}`)
             .then((res) => res.json())
             .then((result) => {
                     this.text = result.data
@@ -146,7 +147,7 @@ class Store {
 
     loadAbout = () => {
         apiStore.text = []
-        fetch(`http://localhost:8000/about/`)
+        fetch(`${BASE_API}about/`)
             .then((res) => res.json())
             .then((result) => {
                     this.message = result.data
@@ -168,7 +169,7 @@ class Store {
     }
 
     sendForm = () => {
-        fetch(`http://localhost:8000/form`, {
+        fetch(`${BASE_API}form`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -11,7 +11,7 @@
     display: inline-block;
 }
 
-.dropdown-content {
+.dropdown_content {
     display: none;
     background: #aaa;
     min-width: 160px;
@@ -21,18 +21,18 @@
     padding: 1px;
 }
 
-.dropdown-content div {
+.dropdown_content div {
     display: block;
     color: #000;
     text-decoration: none;
     font-size: 18px;
 }
 
-.dropdown-content p:hover {
+.dropdown_content p:hover {
     background: #bbb;
 }
 
-.dropdown:hover .dropdown-content {
+.dropdown:hover .dropdown_content {
     display: block;
 }
 

@@ -17,7 +17,7 @@ const Info = () => {
                 <div className={'info_panel_text'}>
                     <>
                         <p>Вы авторизованы : {apiStore.login}</p>
-                        <Button variant='contained' color='primary' onClick={() => apiStore.logout(true)}>
+                        <Button variant='contained' color='primary' onClick={() => apiStore.logout()}>
                             Выйти
                         </Button>
                     </>

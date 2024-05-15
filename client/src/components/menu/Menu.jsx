@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './Menu.css'
 
 const Menu = ({title, children}) => {
     return (
         <div className="dropdown">
             <button className="dropbtn">{title}</button>
-            <div className="dropdown-content">
+            <div className="dropdown_content">
                 {React.Children.map(children, (child) => {
                     if (React.isValidElement(child)) {
                         return React.cloneElement(child);
