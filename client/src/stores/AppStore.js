@@ -13,8 +13,8 @@ class Store {
     isOpenLoginModal = false
     login = ''
     password = ''
-    isAuth = sessionStorage.getItem('isAuth') === 'true'
-    token = sessionStorage.getItem('token')
+    isAuth = Boolean(Cookies.get('csrftoken'))
+    token = Cookies.get('csrftoken')
     text = []
     openFormModal = false
     message = 'нет данных'
@@ -65,9 +65,7 @@ class Store {
     // }
 
     clearData = () => {
-        sessionStorage.setItem('token', "")
-        sessionStorage.setItem('login', "")
-        sessionStorage.setItem('isAuth', 'false');
+        Cookies.set('csrftoken','')
         this.isAuth = false
         this.text = []
     }
@@ -107,7 +105,7 @@ class Store {
                 Cookies.set('csrftoken', result.token);
                 this.isAuth = true;
             } else {
-                sessionStorage.setItem('isAuth', 'false');
+                Cookies.set('csrftoken', '');
             }
 
             this.setTextAuth(result.message);
@@ -123,7 +121,7 @@ class Store {
 
     logout = () => {
         this.setTextAuth('Для авторизации введите логин и пароль')
-        fetch(`${BASE_API}logout`)
+        fetch(`${BASE_API}logout/`)
             .then((res) => res.json())
             .then(() => {
                     this.isAuth = false
@@ -169,11 +167,11 @@ class Store {
     }
 
     sendForm = () => {
-        fetch(`${BASE_API}form`, {
+        fetch(`${BASE_API}form/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+                'X-CSRFToken': Cookies.get('csrftoken'),
             },
 
             body: JSON.stringify(this.formData)

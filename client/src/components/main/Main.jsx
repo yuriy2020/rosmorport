@@ -6,7 +6,7 @@ import Grid from "../grid/Grid";
 import {apiStore} from "../../stores/AppStore";
 
 const Main = () => {
-    if (apiStore.isAuth && apiStore.text.length > 0) {
+    if (apiStore.isAuth) {
         return <Grid/>
     }
     return <div>{apiStore.message}</div>
