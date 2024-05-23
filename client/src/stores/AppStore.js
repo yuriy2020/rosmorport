@@ -13,16 +13,16 @@ class Store {
     isOpenLoginModal = false
     login = ''
     password = ''
-    isAuth = Boolean(Cookies.get('csrftoken'))
-    token = Cookies.get('csrftoken')
-    text = []
+    isAuth = false
+    data = []
     openFormModal = false
+    openAbout = false
     message = 'нет данных'
     hasFilters = false
     errorName = false
-    errorLogin = false
-    errorPassword = false
     typeSign = ''
+    time = ''
+    badLogin = false
 
     formData = {
         family: '',
@@ -53,21 +53,16 @@ class Store {
         this.isOpenModal = value
         this.typeSign = typeSign
     }
-    // setOpenLoginModal = (value) => {
-    //     this.isOpenLoginModal = value
-    // }
+
     setReg = (field, value) => {
         this.regForm = {...this.regForm, [field]: value}
         console.log(this.regForm)
     }
-    // setPassword = (password) => {
-    //     this.password = password
-    // }
 
     clearData = () => {
-        Cookies.set('csrftoken','')
+        Cookies.set('csrftoken', '')
         this.isAuth = false
-        this.text = []
+        this.data = []
     }
 
     clearForm = () => {
@@ -85,6 +80,7 @@ class Store {
     }
 
     auth = async () => {
+        this.badLogin = false
         try {
             const response = await fetch(`${BASE_API}${this.typeSign}/`, {
                 method: 'POST',
@@ -106,12 +102,13 @@ class Store {
                 this.isAuth = true;
             } else {
                 Cookies.set('csrftoken', '');
+                this.badLogin = true
             }
 
             this.setTextAuth(result.message);
         } catch (error) {
             console.error(error);
-            this.text = [];
+            this.data = [];
         }
     }
 
@@ -121,36 +118,32 @@ class Store {
 
     logout = () => {
         this.setTextAuth('Для авторизации введите логин и пароль')
-        fetch(`${BASE_API}logout/`)
+        fetch(`${BASE_API}logout/`, {method: 'POST',})
             .then((res) => res.json())
             .then(() => {
                     this.isAuth = false
                     this.clearData()
-                    this.text = []
+                    this.data = []
 
                 }
-            ).then(this.reloadPageWindow)
+            )
+        // .then(this.reloadPageWindow)
     }
 
-    loadData = (id) => {
-        fetch(`${BASE_API}otchet?id=${id}`)
+    loadData = (withFilters) => {
+        fetch(`${BASE_API}form/`,)
             .then((res) => res.json())
             .then((result) => {
-                    this.text = result.data
+                    this.data = result.data
+                    this.time = result.time
                     this.message = result.message
-                    this.hasFilters = result.hasFilters
+                    this.hasFilters = withFilters
                 }
             )
     }
 
-    loadAbout = () => {
-        apiStore.text = []
-        fetch(`${BASE_API}about/`)
-            .then((res) => res.json())
-            .then((result) => {
-                    this.message = result.data
-                }
-            )
+    loadAbout = (value) => {
+        this.openAbout = value
     }
     onChangeFamily = (value) => this.formData.family = value;
     onChangeName = (value) => this.formData.name = value;
@@ -177,12 +170,11 @@ class Store {
             body: JSON.stringify(this.formData)
         })
             .then((res) => res.json())
-            .then((result) => {
-                    this.text = result.data
-                }
-            ).then(() => {
-            this.setOpenFormModal(false)
-        })
+            .then(() => {
+                this.setOpenFormModal(false)
+                this.loadData(this.hasFilters || false)
+            })
+
     }
 
     setTextAuth = (value) => {
@@ -191,12 +183,6 @@ class Store {
 
     setErrorName = (value) => {
         this.errorName = value
-    }
-    setErrorLogin = (value) => {
-        this.errorLogin = value
-    }
-    setErrorPassword = (value) => {
-        this.errorPassword = value
     }
 }
 

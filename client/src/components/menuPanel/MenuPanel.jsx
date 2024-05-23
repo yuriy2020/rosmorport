@@ -17,8 +17,8 @@ const MenuPanel = () => {
             <Menu title={'Отчёты'}>
                 {apiStore.isAuth ? (
                     <>
-                        <MenuItem onClick={() => apiStore.loadData(2)}>Отчёт 1</MenuItem>
-                        <MenuItem onClick={() => apiStore.loadData(3)}>Отчёт 2</MenuItem>
+                        <MenuItem onClick={() => apiStore.loadData(true)}>Отчёт 1</MenuItem>
+                        <MenuItem onClick={() => apiStore.loadData(false)}>Отчёт 2</MenuItem>
                     </>
                 ) : (
                     <MenuItem>Необходима авторизация</MenuItem>
@@ -27,7 +27,7 @@ const MenuPanel = () => {
             <Menu title={'Информация'}>
                 {apiStore.isAuth ? (
                     <>
-                        <MenuItem onClick={apiStore.loadAbout}>О приложении</MenuItem>
+                        <MenuItem onClick={()=>apiStore.loadAbout(true)}>О приложении</MenuItem>
                     </>
                 ) : (
                     <MenuItem>Необходима авторизация</MenuItem>

@@ -9,13 +9,13 @@ import {
     FormLabel,
     Radio,
     RadioGroup,
-    TextField
+    TextField, Typography
 } from "@mui/material";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import {observer} from "mobx-react-lite";
 import DialogActions from "@mui/material/DialogActions";
-import {COUNTRIES} from "../../consts";
+import {aboutText, COUNTRIES} from "../../consts";
 
 function Dialogs() {
 
@@ -26,23 +26,7 @@ function Dialogs() {
         }
         apiStore.setErrorName(true)
 
-    }, [apiStore.formData.name])
-
-    // useEffect(() => {
-    //     if (apiStore.login !== '') {
-    //         apiStore.setErrorLogin(false)
-    //         return
-    //     }
-    //     apiStore.setErrorLogin(true)
-    // }, [apiStore.login])
-    //
-    // useEffect(() => {
-    //     if (apiStore.password !== '') {
-    //         apiStore.setErrorPassword(false)
-    //         return
-    //     }
-    //     apiStore.setErrorPassword(true)
-    // }, [apiStore.password]);
+    }, [])
 
 
     return (
@@ -176,7 +160,7 @@ function Dialogs() {
             <Dialog open={apiStore.isOpenModal} onClose={() => apiStore.setOpenModal(false)}>
                 <DialogTitle>Регистрация</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>{apiStore.textAuth}</DialogContentText>
+                    <DialogContentText color={apiStore.badLogin ? 'red' : 'black'}>{apiStore.textAuth}</DialogContentText>
                     <TextField
                         autoFocus
                         required
@@ -224,6 +208,15 @@ function Dialogs() {
                         Войти
                     </Button>
                 </DialogActions>
+            </Dialog>
+
+            <Dialog open={apiStore.openAbout} onClose={() => apiStore.loadAbout(false)}>
+                <DialogTitle>О приложении</DialogTitle>
+                <DialogContent>
+                    <Typography variant={'subtitle2'}>
+                        {aboutText}
+                    </Typography>
+                </DialogContent>
             </Dialog>
         </>
     );

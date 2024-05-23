@@ -1,31 +1,54 @@
 import React from 'react';
-import {Box} from "@mui/material";
-import {DataGrid, GridToolbar} from "@mui/x-data-grid";
+import {Typography} from "@mui/material";
+import {
+    DataGrid,
+    GridToolbarContainer,
+    GridToolbarFilterButton,
+    GridToolbarDensitySelector,
+} from "@mui/x-data-grid";
+import Divider from '@mui/material/Divider';
 import {apiStore} from "../../stores/AppStore";
 import {observer} from "mobx-react-lite";
 import {columns} from "../../consts";
+import {ruRU} from '@mui/x-data-grid/locales';
+
+function CustomToolbar() {
+    return (
+        <GridToolbarContainer>
+            <GridToolbarFilterButton/>
+            <GridToolbarDensitySelector/>
+        </GridToolbarContainer>
+    );
+}
+
+const tableStyle = {
+    height: 500,
+    width: '100%',
+    overflowY: 'auto',
+};
 
 function Grid() {
     return (
         <div className={'main_panel'}>
-            <Box sx={{ width: '100%'}}>
+            <div style={{maxHeight: 500, overflowY: 'hidden'}}>
                 <DataGrid
-                    slots={apiStore.hasFilters ? {toolbar: GridToolbar} : {}}
-                    rows={apiStore.text}
+                    localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
+                    slots={apiStore.hasFilters ? {toolbar: CustomToolbar} : {}}
+                    rows={apiStore.data}
                     columns={columns}
-                    initialState={{
-                        pagination: {
-                            paginationModel: {
-                                pageSize: 10,
-                            },
-                        },
-                    }}
-                    pageSizeOptions={[5]}
-                    checkboxSelection
                     disableRowSelectionOnClick
+                    hideFooter
+                    columnHeaderHeight={30}
+                    style={tableStyle}
                 />
-            </Box>
-
+            </div>
+            <Divider/>
+            <Typography gutterBottom>
+                Количество записей в отчёте : {apiStore.data.length}
+            </Typography>
+            <Typography gutterBottom>
+                Время выполнения запроса к базе данных : {apiStore.time || '--'}
+            </Typography>
         </div>
     );
 }

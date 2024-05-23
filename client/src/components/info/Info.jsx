@@ -1,14 +1,10 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import './Info.css'
 import {Button} from '@mui/material/'
 import {observer} from "mobx-react-lite";
 import {apiStore} from "../../stores/AppStore";
 
 const Info = () => {
-
-    useEffect(()=>{
-        console.log('>>>')
-    })
     return (
         <div className={'info_panel'}>
             <div className={'info_panel_text'}>«Тестовое задание Frontend»</div>
