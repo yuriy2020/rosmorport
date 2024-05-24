@@ -1,0 +1,14 @@
+/logs/*
+/venv
+/env
+__pycache__
+.idea/*
+/local_settings.py
+/gist
+/logs
+/cache
+/cache/*
+/.coverage
+/.pytest_cache
+/unit_test_reports
+/upload/manual/*
