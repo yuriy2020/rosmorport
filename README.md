@@ -32,7 +32,7 @@ python ./manage.py migrate
 
 Для запуска кода, который создает объекты модели CountryModel, вам нужно выполнить следующие шаги:
 
-Откройте Django shell командой python manage.py shell в корневой папке вашего проекта.
+Откройте Django shell командой ```python manage.py shell``` в корневой папке вашего проекта.
 Введите следующий код:
 
 ```
