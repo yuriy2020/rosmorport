@@ -15,7 +15,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import {observer} from "mobx-react-lite";
 import DialogActions from "@mui/material/DialogActions";
-import {aboutText, COUNTRIES} from "../../consts";
+import {aboutText, BASE_API, COUNTRIES} from "../../consts";
 
 function Dialogs() {
 
@@ -26,7 +26,23 @@ function Dialogs() {
         }
         apiStore.setErrorName(true)
 
-    }, [])
+    }, [apiStore.formData.name])
+
+    useEffect(() => {
+        if (apiStore.openFormModal && apiStore.countries.length === 0) {
+            fetchData();
+        }
+    }, [apiStore.openFormModal])
+
+    const fetchData = async () => {
+        try {
+            const response = await fetch(BASE_API + 'country/');
+            const data = await response.json();
+            apiStore.countries = data
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
 
 
     return (
@@ -76,12 +92,12 @@ function Dialogs() {
                         <Autocomplete
                             id="country-select-demo"
                             sx={{width: 300}}
-                            options={COUNTRIES}
+                            options={apiStore.countries}
                             autoHighlight
                             getOptionLabel={(option) => option.label || ''}
                             isOptionEqualToValue={(option, value) => option.code === value.code}
                             renderOption={(props, option) => (
-                                <Box component="li" sx={{'& > img': {mr: 2, flexShrink: 0}}} {...props}>
+                                <Box component="li" sx={{'& > img': {mr: 2, flexShrink: 0}}} {...props} key={option.id}>
                                     <img
                                         loading="lazy"
                                         width="20"
@@ -89,7 +105,7 @@ function Dialogs() {
                                         src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
                                         alt=""
                                     />
-                                    {option.label} ({option.code}) +{option.phone}
+                                    {option.label} ({option.code}){option.phone}
                                 </Box>
                             )}
                             renderInput={(params) => (

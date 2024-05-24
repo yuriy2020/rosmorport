@@ -23,6 +23,7 @@ class Store {
     typeSign = ''
     time = ''
     badLogin = false
+    countries = []
 
     formData = {
         family: '',
@@ -70,9 +71,7 @@ class Store {
         this.formData.family = ''
         this.formData.surname = ''
         this.formData.sex = ''
-        this.formData.country.label = ''
-        this.formData.country.phone = ''
-        this.formData.country.code = ''
+        this.formData.country = ''
         this.formData.age = 1
         this.formData.food.traditional = false
         this.formData.food.dietician = false
@@ -126,8 +125,7 @@ class Store {
                     this.data = []
 
                 }
-            )
-        // .then(this.reloadPageWindow)
+            ).then(this.reloadPageWindow)
     }
 
     loadData = (withFilters) => {
