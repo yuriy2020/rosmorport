@@ -1,5 +1,5 @@
 import React from 'react';
-import {Typography} from "@mui/material";
+import {Box, Typography} from "@mui/material";
 import {
     DataGrid,
     GridToolbarContainer,
@@ -25,13 +25,21 @@ const tableStyle = {
     height: 500,
     width: '100%',
     overflowY: 'auto',
-};
+}
+
 
 function Grid() {
     return (
         <div className={'main_panel'}>
-            <div style={{maxHeight: 500, overflowY: 'hidden'}}>
+            <Box
+                sx={{
+                    '& .columns-header': {
+                        backgroundColor: '#e6f3ff',
+                    },
+                }}
+            >
                 <DataGrid
+                    showColumnVerticalBorder={true}
                     localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
                     slots={apiStore.hasFilters ? {toolbar: CustomToolbar} : {}}
                     rows={apiStore.data}
@@ -39,9 +47,9 @@ function Grid() {
                     disableRowSelectionOnClick
                     hideFooter
                     columnHeaderHeight={30}
-                    style={tableStyle}
+                    sx={tableStyle}
                 />
-            </div>
+            </Box>
             <Divider/>
             <Typography gutterBottom>
                 Количество записей в отчёте : {apiStore.data.length}

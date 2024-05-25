@@ -174,9 +174,10 @@ function Dialogs() {
             </Dialog>
 
             <Dialog open={apiStore.isOpenModal} onClose={() => apiStore.setOpenModal(false)}>
-                <DialogTitle>Регистрация</DialogTitle>
+                <DialogTitle>{apiStore.typeSign === 'login' ? 'Вход' : 'Регистрация'}</DialogTitle>
                 <DialogContent>
-                    <DialogContentText color={apiStore.badLogin ? 'red' : 'black'}>{apiStore.textAuth}</DialogContentText>
+                    <DialogContentText
+                        color={apiStore.badLogin ? 'red' : 'black'}>{apiStore.textAuth}</DialogContentText>
                     <TextField
                         autoFocus
                         required
@@ -221,7 +222,7 @@ function Dialogs() {
                     <Button type='submit' onClick={apiStore.auth}
                         // disabled={apiStore.errorLogin || apiStore.errorPassword}
                     >
-                        Войти
+                        {apiStore.typeSign === 'login' ? 'Вход' : 'Регистрация'}
                     </Button>
                 </DialogActions>
             </Dialog>

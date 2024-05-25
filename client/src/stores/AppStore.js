@@ -1,6 +1,6 @@
 import {makeAutoObservable} from "mobx"
 import Cookies from 'js-cookie';
-import {BASE_API} from "../consts";
+import {BASE_API, TEXT_AUTH} from "../consts";
 
 class Store {
     constructor() {
@@ -8,12 +8,12 @@ class Store {
     }
 
     value = 0
-    textAuth = 'Для авторизации введите логин и пароль'
+    textAuth = TEXT_AUTH
     isOpenModal = false
     isOpenLoginModal = false
     login = ''
     password = ''
-    isAuth = false
+    isAuth = Boolean(Cookies.get('csrftoken'))
     data = []
     openFormModal = false
     openAbout = false
@@ -51,13 +51,16 @@ class Store {
     }
 
     setOpenModal = (value, typeSign) => {
+        if(!typeSign){
+            this.textAuth = TEXT_AUTH
+            this.badLogin = false
+        }
         this.isOpenModal = value
         this.typeSign = typeSign
     }
 
     setReg = (field, value) => {
         this.regForm = {...this.regForm, [field]: value}
-        console.log(this.regForm)
     }
 
     clearData = () => {

@@ -1,50 +1,61 @@
 const BASE_API = `http://localhost:5000/`
-
+const TEXT_AUTH = 'Для авторизации введите логин и пароль'
 const columns = [
-    {field: 'family', headerName: 'Фамилия', width: 90},
+    {
+        field: 'family',
+        headerName: 'Фамилия',
+        flex: 1,
+        headerClassName: 'columns-header',
+    },
     {
         field: 'name',
         headerName: 'Имя',
-        width: 150,
+        flex: 1,
+        headerClassName: 'columns-header',
     },
     {
         field: 'surname',
         headerName: 'Отчество',
-        width: 150,
+        flex: 1,
+        headerClassName: 'columns-header',
     },
     {
         field: 'sex',
         headerName: 'Пол',
-        width: 150,
+        flex: 1,
         valueGetter: (params) => {
-            if(params === 'female') return 'Женский'
-            if(params === 'male') return 'Мужской'
-        }
+            if (params === 'female') return 'Женский'
+            if (params === 'male') return 'Мужской'
+        },
+        headerClassName: 'columns-header',
     },
     {
         field: 'country',
         headerName: 'Страна',
-        width: 150,
+        flex: 1,
         valueGetter: (params) => {
             return params?.label || ''
-        }
+        },
+        headerClassName: 'columns-header',
     },
     {
         field: 'age',
         headerName: 'Возраст',
-        width: 150,
+        flex: 1,
+        headerClassName: 'columns-header',
     },
     {
         field: 'traditional',
         headerName: 'Питание',
-        width: 400,
-        valueGetter:(value, row) => {
+        flex: 2,
+        valueGetter: (value, row) => {
             let result = ''
             if (row?.dietician) result += 'Диетиеская\n'
             if (row?.vegan) result += 'Веганская\n'
             if (row?.traditional) result += 'Традиционная'
             return result
-        }
+        },
+        headerClassName: 'columns-header',
     },
 ]
 
@@ -63,4 +74,4 @@ const aboutText = 'Необходимо реализовать интерфей�
     '                При нажатии на подпункт «Отчёт 2» будет отображён аналогичный «Отчёту 1» отчёт, но с возможностью фильтрации по полям (1+) на выбор тестируемого. Техническая реализация фильтра – на усмотрение тестируемого (обработка на клиенте, запрос к серверу с параметрами, или иное).\n' +
     '                При нажатии на подпункт «О приложении» будет отображено всплывающее окно с содержимым на выбор тестируемого.'
 
-export {BASE_API, columns, aboutText}
+export {BASE_API, columns, aboutText,TEXT_AUTH}
