@@ -38,3 +38,4 @@ __pycache__
 /unit_test_reports
 /upload/manual/*
 /back/app/migrations/*
+/client/build/
