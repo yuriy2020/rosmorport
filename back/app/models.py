@@ -20,7 +20,6 @@ class UserModel(models.Model):
     name = models.CharField(max_length=100)
     surname = models.CharField(max_length=100)
     age = models.IntegerField(default=0, null=True, blank=True)
-    # country = models.ForeignKey(CountryModel, on_delete=models.CASCADE, )
     country = models.ForeignKey(CountryModel, on_delete=models.SET_NULL, null=True, blank=True)
     sex = models.CharField(max_length=10, choices=GENDER_CHOICES)
     traditional = models.BooleanField(default=False)

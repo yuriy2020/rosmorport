@@ -35,10 +35,10 @@ class RegisterView(APIView):
         user = request.data.get('username')
         email = request.data.get('email')
         password = request.data.get('password')
-
+        if User.objects.filter(username=user).exists():
+            return Response({'message': 'Пользователь с таким логином уже существует'},status=status.HTTP_400_BAD_REQUEST)
         if User.objects.filter(email=email).exists():
             return Response({'message': 'Пользователь с таким email уже существует'}, status=status.HTTP_400_BAD_REQUEST)
-
         user = User.objects.create_user(username=user, email=email, password=password)
         token, created = Token.objects.get_or_create(user=user)
         return Response({'token': token.key, 'status': status.HTTP_201_CREATED})
@@ -50,12 +50,9 @@ class LoginView(APIView):
 
     def post(self, request):
         user = request.data.get('username')
-        # email = request.data.get('email')
         password = request.data.get('password')
-        print('>>>', user, password)
 
         user = authenticate(request, username=user, password=password)
-        print('>>>', user)
         if user is not None:
             login(request, user)
             token, created = Token.objects.get_or_create(user=user)
