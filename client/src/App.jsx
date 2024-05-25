@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import './App.css'
 import Info from './components/info/Info'
 import MenuPanel from './components/menuPanel/MenuPanel'

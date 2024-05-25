@@ -13,7 +13,7 @@ class Store {
     isOpenLoginModal = false
     login = ''
     password = ''
-    isAuth = Boolean(Cookies.get('csrftoken'))
+    isAuth = false
     data = []
     openFormModal = false
     openAbout = false
@@ -51,7 +51,7 @@ class Store {
     }
 
     setOpenModal = (value, typeSign) => {
-        if(!typeSign){
+        if (!typeSign) {
             this.textAuth = TEXT_AUTH
             this.badLogin = false
         }
@@ -67,6 +67,8 @@ class Store {
         Cookies.set('csrftoken', '')
         this.isAuth = false
         this.data = []
+        this.login = ''
+        this.password = ''
     }
 
     clearForm = () => {
@@ -101,6 +103,7 @@ class Store {
             } else if (result.status === 200 && result.token) {
                 this.setOpenModal(false);
                 Cookies.set('csrftoken', result.token);
+                this.login = result.username || ''
                 this.isAuth = true;
             } else {
                 Cookies.set('csrftoken', '');
@@ -119,14 +122,11 @@ class Store {
     }
 
     logout = () => {
-        this.setTextAuth('Для авторизации введите логин и пароль')
+        this.setTextAuth(TEXT_AUTH)
         fetch(`${BASE_API}logout/`, {method: 'POST',})
             .then((res) => res.json())
             .then(() => {
-                    this.isAuth = false
                     this.clearData()
-                    this.data = []
-
                 }
             ).then(this.reloadPageWindow)
     }

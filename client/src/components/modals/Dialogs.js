@@ -125,9 +125,10 @@ function Dialogs() {
 
                     <Box component="section" sx={{p: 1}}>
                         <TextField type="number"
+                                   fullWidth={true}
                                    label="Ваш возраст"
                                    InputProps={{
-                                       inputProps: {min: 0}
+                                       inputProps: {min: 0, max:100},
                                    }}
                                    value={apiStore.formData.age}
                                    onChange={(event) => apiStore.onChangeAge(event)}

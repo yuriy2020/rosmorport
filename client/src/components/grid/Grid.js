@@ -22,7 +22,7 @@ function CustomToolbar() {
 }
 
 const tableStyle = {
-    height: 500,
+    height: '70vh',
     width: '100%',
     overflowY: 'auto',
 }
@@ -30,7 +30,7 @@ const tableStyle = {
 
 function Grid() {
     return (
-        <div className={'main_panel'}>
+        <div style={{marginTop: '10px'}}>
             <Box
                 sx={{
                     '& .columns-header': {
@@ -50,13 +50,18 @@ function Grid() {
                     sx={tableStyle}
                 />
             </Box>
-            <Divider/>
-            <Typography gutterBottom>
-                Количество записей в отчёте : {apiStore.data.length}
-            </Typography>
-            <Typography gutterBottom>
-                Время выполнения запроса к базе данных : {apiStore.time || '--'}
-            </Typography>
+            <Box sx={{mt: 2, display: 'flex', flexDirection: 'row', alignItems: 'left'}}>
+                <Box sx={{flex: 1}}>
+                    <Divider orientation="horizontal" flexItem/>
+                    <Typography gutterBottom>
+                        Количество записей в отчёте : {apiStore.data.length}
+                    </Typography>
+                    <Typography gutterBottom>
+                        Время выполнения запроса к базе данных : {apiStore.time || '--'}
+                    </Typography>
+                    <Divider orientation="horizontal" flexItem/>
+                </Box>
+            </Box>
         </div>
     );
 }
